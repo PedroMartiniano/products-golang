@@ -1,0 +1,78 @@
+definitions:
+  controllers.createProductRequest:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    required:
+    - category
+    - description
+    - name
+    - price
+    type: object
+  controllers.errorResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  controllers.productSuccessResponse1:
+    properties:
+      data:
+        $ref: '#/definitions/models.Product'
+      success:
+        type: boolean
+    type: object
+  models.Product:
+    properties:
+      category:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      updated_at:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /product:
+    post:
+      consumes:
+      - application/json
+      description: Should create a new product in the database successfuly
+      parameters:
+      - description: Body Json
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.createProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/controllers.productSuccessResponse1'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Create an product
+      tags:
+      - Product
+swagger: "2.0"

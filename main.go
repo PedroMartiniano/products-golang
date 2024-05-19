@@ -15,6 +15,8 @@ func main() {
 
 	server := gin.Default()
 
+	server.Use(config.CorsConfig())
+
 	routes.RegisterRoutes(server)
 
 	port := config.GetEnv("PORT")

@@ -13,6 +13,15 @@ func NewProductController() *productController {
 	return &productController{}
 }
 
+// @Summary      Create an product
+// @Description  Should create a new product in the database successfuly
+// @Tags         Product
+// @Accept       json
+// @Produce      json
+// @Param        request   body      createProductRequest  true  "Body Json"
+// @Success      201  {object}  productSuccessResponse1
+// @Failure      400  {object}  errorResponse
+// @Router       /product [post]
 func (pc *productController) CreateProductHandler(c *gin.Context) {
 	var request createProductRequest
 
