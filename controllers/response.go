@@ -26,3 +26,8 @@ type productSuccessResponse1 struct {
 	Success bool           `json:"success"`
 	Data    models.Product `json:"data"`
 }
+
+type productSuccessResponse2 struct {
+	Success bool             `json:"success"`
+	Data    []models.Product `json:"data"`
+}

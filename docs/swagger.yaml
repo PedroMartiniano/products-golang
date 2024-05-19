@@ -29,6 +29,15 @@ definitions:
       success:
         type: boolean
     type: object
+  controllers.productSuccessResponse2:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Product'
+        type: array
+      success:
+        type: boolean
+    type: object
   models.Product:
     properties:
       category:
@@ -50,10 +59,28 @@ info:
   contact: {}
 paths:
   /product:
+    get:
+      consumes:
+      - application/json
+      description: Should get all products successfully
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.productSuccessResponse2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Get all products
+      tags:
+      - Product
     post:
       consumes:
       - application/json
-      description: Should create a new product in the database successfuly
+      description: Should create a new product in the database successfully
       parameters:
       - description: Body Json
         in: body
@@ -72,7 +99,32 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/controllers.errorResponse'
-      summary: Create an product
+      summary: Create a new product
+      tags:
+      - Product
+  /product/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Should get a product by his id successfully
+      parameters:
+      - description: Id Product
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.productSuccessResponse1'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Get a product by his id
       tags:
       - Product
 swagger: "2.0"

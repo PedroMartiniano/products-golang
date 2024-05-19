@@ -16,8 +16,8 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/product": {
-            "post": {
-                "description": "Should create a new product in the database successfuly",
+            "get": {
+                "description": "Should get all products successfully",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,7 +27,34 @@ const docTemplate = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "Create an product",
+                "summary": "Get all products",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.productSuccessResponse2"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.errorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Should create a new product in the database successfully",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Create a new product",
                 "parameters": [
                     {
                         "description": "Body Json",
@@ -42,6 +69,44 @@ const docTemplate = `{
                 "responses": {
                     "201": {
                         "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.productSuccessResponse1"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/{id}": {
+            "get": {
+                "description": "Should get a product by his id successfully",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Get a product by his id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id Product",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/controllers.productSuccessResponse1"
                         }
@@ -96,6 +161,20 @@ const docTemplate = `{
             "properties": {
                 "data": {
                     "$ref": "#/definitions/models.Product"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "controllers.productSuccessResponse2": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Product"
+                    }
                 },
                 "success": {
                     "type": "boolean"
