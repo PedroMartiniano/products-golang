@@ -9,6 +9,6 @@ type IProductRepository interface {
 	Create(models.Product) (models.Product, error)
 	FindById(id primitive.ObjectID) (models.Product, error)
 	List() ([]models.Product, error)
-	// Update()
-	// Delete()
+	Update(models.Product) (models.Product, error)
+	Delete(models.Product) (models.Product, error)
 }

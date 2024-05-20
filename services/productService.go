@@ -33,3 +33,15 @@ func (ps *productService) ListProductsExecute() ([]models.Product, error) {
 
 	return products, err
 }
+
+func (ps *productService) UpdateProductExecute(product models.Product) (models.Product, error) {
+	updatedProduct, err := ps.productRepository.Update(product)
+
+	return updatedProduct, err
+}
+
+func (ps *productService) DeleteProductExecute(product models.Product) (models.Product, error) {
+	productDeleted, err := ps.productRepository.Delete(product)
+
+	return productDeleted, err
+}

@@ -38,6 +38,17 @@ definitions:
       success:
         type: boolean
     type: object
+  controllers.updateProductRequest:
+    properties:
+      category:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    type: object
   models.Product:
     properties:
       category:
@@ -103,6 +114,30 @@ paths:
       tags:
       - Product
   /product/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Should delete a product by his id successfully
+      parameters:
+      - description: Id Product
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.productSuccessResponse1'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Delete a product
+      tags:
+      - Product
     get:
       consumes:
       - application/json
@@ -125,6 +160,36 @@ paths:
           schema:
             $ref: '#/definitions/controllers.errorResponse'
       summary: Get a product by his id
+      tags:
+      - Product
+    put:
+      consumes:
+      - application/json
+      description: Should update a existing product in the database successfully
+      parameters:
+      - description: Id Product
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Body Json
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.updateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.productSuccessResponse1'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.errorResponse'
+      summary: Update a product
       tags:
       - Product
 swagger: "2.0"

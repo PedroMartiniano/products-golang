@@ -68,3 +68,41 @@ func (pr *productRepository) List() ([]models.Product, error) {
 
 	return products, nil
 }
+
+func (pr *productRepository) Update(product models.Product) (models.Product, error) {
+	collection := config.DB.Collection("products")
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	updatedProduct := bson.M{
+		"$set": bson.M{
+			"name":        product.Name,
+			"description": product.Description,
+			"price":       product.Price,
+			"category":    product.Category,
+			"updated_at":  time.Now(),
+		},
+	}
+
+	_, err := collection.UpdateByID(ctx, product.ID, updatedProduct)
+	if err != nil {
+		return models.Product{}, err
+	}
+
+	return product, nil
+}
+
+func (pr *productRepository) Delete(product models.Product) (models.Product, error) {
+	collection := config.DB.Collection("products")
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	_, err := collection.DeleteOne(ctx, bson.M{"_id": product.ID})
+	if err != nil {
+		return models.Product{}, err
+	}
+
+	return product, nil
+}
