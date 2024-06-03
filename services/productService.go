@@ -6,41 +6,41 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type productService struct {
+type ProductService struct {
 	productRepository ports.IProductRepository
 }
 
-func NewProductService(productRepository ports.IProductRepository) *productService {
-	return &productService{
+func NewProductService(productRepository ports.IProductRepository) *ProductService {
+	return &ProductService{
 		productRepository: productRepository,
 	}
 }
 
-func (ps *productService) CreateProductExecute(product models.Product) (models.Product, error) {
+func (ps *ProductService) CreateProductExecute(product models.Product) (models.Product, error) {
 	newProduct, err := ps.productRepository.Create(product)
 
 	return newProduct, err
 }
 
-func (ps *productService) FindProductByIdExecute(id primitive.ObjectID) (models.Product, error) {
+func (ps *ProductService) FindProductByIdExecute(id primitive.ObjectID) (models.Product, error) {
 	product, err := ps.productRepository.FindById(id)
 
 	return product, err
 }
 
-func (ps *productService) ListProductsExecute() ([]models.Product, error) {
+func (ps *ProductService) ListProductsExecute() ([]models.Product, error) {
 	products, err := ps.productRepository.List()
 
 	return products, err
 }
 
-func (ps *productService) UpdateProductExecute(product models.Product) (models.Product, error) {
+func (ps *ProductService) UpdateProductExecute(product models.Product) (models.Product, error) {
 	updatedProduct, err := ps.productRepository.Update(product)
 
 	return updatedProduct, err
 }
 
-func (ps *productService) DeleteProductExecute(product models.Product) (models.Product, error) {
+func (ps *ProductService) DeleteProductExecute(product models.Product) (models.Product, error) {
 	productDeleted, err := ps.productRepository.Delete(product)
 
 	return productDeleted, err

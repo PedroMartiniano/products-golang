@@ -10,13 +10,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type productRepository struct{}
+type ProductRepository struct{}
 
-func NewProductRepository() *productRepository {
-	return &productRepository{}
+func NewProductRepository() *ProductRepository {
+	return &ProductRepository{}
 }
 
-func (pr *productRepository) Create(product models.Product) (models.Product, error) {
+func (pr *ProductRepository) Create(product models.Product) (models.Product, error) {
 	collection := config.DB.Collection("products")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
@@ -28,13 +28,13 @@ func (pr *productRepository) Create(product models.Product) (models.Product, err
 
 	_, err := collection.InsertOne(ctx, product)
 	if err != nil {
-		return models.Product{}, err
+		return models.Product{}, config.NewError(config.ErrInternalServer, err)
 	}
 
 	return product, nil
 }
 
-func (pr *productRepository) FindById(id primitive.ObjectID) (models.Product, error) {
+func (pr *ProductRepository) FindById(id primitive.ObjectID) (models.Product, error) {
 	collection := config.DB.Collection("products")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
@@ -43,33 +43,33 @@ func (pr *productRepository) FindById(id primitive.ObjectID) (models.Product, er
 	var product models.Product
 	err := collection.FindOne(ctx, bson.M{"_id": id}).Decode(&product)
 	if err != nil {
-		return models.Product{}, err
+		return models.Product{}, config.NewError(config.ErrNotFound, err)
 	}
 
 	return product, nil
 }
 
-func (pr *productRepository) List() ([]models.Product, error) {
+func (pr *ProductRepository) List() ([]models.Product, error) {
 	collection := config.DB.Collection("products")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	cur, err := collection.Find(ctx, bson.M{})
+	cur, err := collection.Find(ctx, bson.D{})
 	if err != nil {
-		return []models.Product{}, err
+		return []models.Product{}, config.NewError(config.ErrInternalServer, err)
 	}
 
 	var products []models.Product
 	err = cur.All(ctx, &products)
 	if err != nil {
-		return []models.Product{}, err
+		return []models.Product{}, config.NewError(config.ErrInternalServer, err)
 	}
 
 	return products, nil
 }
 
-func (pr *productRepository) Update(product models.Product) (models.Product, error) {
+func (pr *ProductRepository) Update(product models.Product) (models.Product, error) {
 	collection := config.DB.Collection("products")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
@@ -80,20 +80,22 @@ func (pr *productRepository) Update(product models.Product) (models.Product, err
 			"name":        product.Name,
 			"description": product.Description,
 			"price":       product.Price,
-			"category":    product.Category,
+			"weight":      product.Weight,
+			"color":       product.Color,
+			"type":        product.Type,
 			"updated_at":  time.Now(),
 		},
 	}
 
 	_, err := collection.UpdateByID(ctx, product.ID, updatedProduct)
 	if err != nil {
-		return models.Product{}, err
+		return models.Product{}, config.NewError(config.ErrInternalServer, err)
 	}
 
 	return product, nil
 }
 
-func (pr *productRepository) Delete(product models.Product) (models.Product, error) {
+func (pr *ProductRepository) Delete(product models.Product) (models.Product, error) {
 	collection := config.DB.Collection("products")
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
@@ -101,7 +103,7 @@ func (pr *productRepository) Delete(product models.Product) (models.Product, err
 
 	_, err := collection.DeleteOne(ctx, bson.M{"_id": product.ID})
 	if err != nil {
-		return models.Product{}, err
+		return models.Product{}, config.NewError(config.ErrInternalServer, err)
 	}
 
 	return product, nil

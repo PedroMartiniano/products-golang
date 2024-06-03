@@ -1,4 +1,4 @@
-package controllers
+package response
 
 import (
 	"errors"
