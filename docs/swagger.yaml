@@ -1,7 +1,7 @@
 definitions:
   controllers.createProductRequest:
     properties:
-      category:
+      color:
         type: string
       description:
         type: string
@@ -9,11 +9,17 @@ definitions:
         type: string
       price:
         type: number
+      type:
+        type: string
+      weight:
+        type: number
     required:
-    - category
+    - color
     - description
     - name
     - price
+    - type
+    - weight
     type: object
   controllers.errorResponse:
     properties:
@@ -40,7 +46,9 @@ definitions:
     type: object
   controllers.updateProductRequest:
     properties:
-      category:
+      Weight:
+        type: number
+      color:
         type: string
       description:
         type: string
@@ -48,10 +56,12 @@ definitions:
         type: string
       price:
         type: number
+      type:
+        type: string
     type: object
   models.Product:
     properties:
-      category:
+      color:
         type: string
       created_at:
         type: string
@@ -63,8 +73,12 @@ definitions:
         type: string
       price:
         type: number
+      type:
+        type: string
       updated_at:
         type: string
+      weight:
+        type: number
     type: object
 info:
   contact: {}
@@ -165,7 +179,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: Should update a existing product in the database successfully
+      description: Should update an existing product in the database successfully
       parameters:
       - description: Id Product
         in: path

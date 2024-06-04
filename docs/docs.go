@@ -120,7 +120,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Should update a existing product in the database successfully",
+                "description": "Should update an existing product in the database successfully",
                 "consumes": [
                     "application/json"
                 ],
@@ -206,13 +206,15 @@ const docTemplate = `{
         "controllers.createProductRequest": {
             "type": "object",
             "required": [
-                "category",
+                "color",
                 "description",
                 "name",
-                "price"
+                "price",
+                "type",
+                "weight"
             ],
             "properties": {
-                "category": {
+                "color": {
                     "type": "string"
                 },
                 "description": {
@@ -222,6 +224,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "price": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "weight": {
                     "type": "number"
                 }
             }
@@ -265,7 +273,10 @@ const docTemplate = `{
         "controllers.updateProductRequest": {
             "type": "object",
             "properties": {
-                "category": {
+                "Weight": {
+                    "type": "number"
+                },
+                "color": {
                     "type": "string"
                 },
                 "description": {
@@ -276,13 +287,16 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "number"
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },
         "models.Product": {
             "type": "object",
             "properties": {
-                "category": {
+                "color": {
                     "type": "string"
                 },
                 "created_at": {
@@ -300,8 +314,14 @@ const docTemplate = `{
                 "price": {
                     "type": "number"
                 },
+                "type": {
+                    "type": "string"
+                },
                 "updated_at": {
                     "type": "string"
+                },
+                "weight": {
+                    "type": "number"
                 }
             }
         }

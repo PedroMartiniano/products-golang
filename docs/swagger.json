@@ -109,7 +109,7 @@
                 }
             },
             "put": {
-                "description": "Should update a existing product in the database successfully",
+                "description": "Should update an existing product in the database successfully",
                 "consumes": [
                     "application/json"
                 ],
@@ -195,13 +195,15 @@
         "controllers.createProductRequest": {
             "type": "object",
             "required": [
-                "category",
+                "color",
                 "description",
                 "name",
-                "price"
+                "price",
+                "type",
+                "weight"
             ],
             "properties": {
-                "category": {
+                "color": {
                     "type": "string"
                 },
                 "description": {
@@ -211,6 +213,12 @@
                     "type": "string"
                 },
                 "price": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "weight": {
                     "type": "number"
                 }
             }
@@ -254,7 +262,10 @@
         "controllers.updateProductRequest": {
             "type": "object",
             "properties": {
-                "category": {
+                "Weight": {
+                    "type": "number"
+                },
+                "color": {
                     "type": "string"
                 },
                 "description": {
@@ -265,13 +276,16 @@
                 },
                 "price": {
                     "type": "number"
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },
         "models.Product": {
             "type": "object",
             "properties": {
-                "category": {
+                "color": {
                     "type": "string"
                 },
                 "created_at": {
@@ -289,8 +303,14 @@
                 "price": {
                     "type": "number"
                 },
+                "type": {
+                    "type": "string"
+                },
                 "updated_at": {
                     "type": "string"
+                },
+                "weight": {
+                    "type": "number"
                 }
             }
         }
