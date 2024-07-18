@@ -20,7 +20,6 @@ func InitMongoDB() (*mongo.Database, error) {
 
 	if err := client.Database("admin").RunCommand(context.TODO(), bson.D{{Key: "ping", Value: 1}}).Err(); err != nil {
 		return nil, err
-
 	}
 
 	db := client.Database("project-products")

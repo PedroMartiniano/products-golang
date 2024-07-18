@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/PedroMartiniano/products-golang/config"
-	"github.com/PedroMartiniano/products-golang/models"
+	"github.com/PedroMartiniano/products-golang/internal/config"
+	"github.com/PedroMartiniano/products-golang/internal/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -16,10 +16,10 @@ func NewProductRepository() *ProductRepository {
 	return &ProductRepository{}
 }
 
-func (pr *ProductRepository) Create(product models.Product) (models.Product, error) {
+func (pr *ProductRepository) Create(c context.Context, product models.Product) (models.Product, error) {
 	collection := config.DB.Collection("products")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(c, time.Second*10)
 	defer cancel()
 
 	product.ID = primitive.NewObjectID()
@@ -34,10 +34,10 @@ func (pr *ProductRepository) Create(product models.Product) (models.Product, err
 	return product, nil
 }
 
-func (pr *ProductRepository) FindById(id primitive.ObjectID) (models.Product, error) {
+func (pr *ProductRepository) FindById(c context.Context, id primitive.ObjectID) (models.Product, error) {
 	collection := config.DB.Collection("products")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(c, time.Second*10)
 	defer cancel()
 
 	var product models.Product
@@ -49,10 +49,10 @@ func (pr *ProductRepository) FindById(id primitive.ObjectID) (models.Product, er
 	return product, nil
 }
 
-func (pr *ProductRepository) List() ([]models.Product, error) {
+func (pr *ProductRepository) List(c context.Context) ([]models.Product, error) {
 	collection := config.DB.Collection("products")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(c, time.Second*10)
 	defer cancel()
 
 	cur, err := collection.Find(ctx, bson.D{})
@@ -69,10 +69,10 @@ func (pr *ProductRepository) List() ([]models.Product, error) {
 	return products, nil
 }
 
-func (pr *ProductRepository) Update(product models.Product) (models.Product, error) {
+func (pr *ProductRepository) Update(c context.Context, product models.Product) (models.Product, error) {
 	collection := config.DB.Collection("products")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(c, time.Second*10)
 	defer cancel()
 
 	updatedProduct := bson.M{
@@ -95,10 +95,10 @@ func (pr *ProductRepository) Update(product models.Product) (models.Product, err
 	return product, nil
 }
 
-func (pr *ProductRepository) Delete(product models.Product) (models.Product, error) {
+func (pr *ProductRepository) Delete(c context.Context, product models.Product) (models.Product, error) {
 	collection := config.DB.Collection("products")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(c, time.Second*10)
 	defer cancel()
 
 	_, err := collection.DeleteOne(ctx, bson.M{"_id": product.ID})

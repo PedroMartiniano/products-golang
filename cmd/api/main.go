@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/PedroMartiniano/products-golang/config"
-	"github.com/PedroMartiniano/products-golang/routes"
+	"github.com/PedroMartiniano/products-golang/internal/config"
+	"github.com/PedroMartiniano/products-golang/internal/routes"
 	"github.com/gin-gonic/gin"
 )
 

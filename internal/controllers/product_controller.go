@@ -2,18 +2,22 @@ package controllers
 
 import (
 	"fmt"
-	adapters "github.com/PedroMartiniano/products-golang/adapters/services"
 
-	"github.com/PedroMartiniano/products-golang/models"
-	"github.com/PedroMartiniano/products-golang/utils"
+	"github.com/PedroMartiniano/products-golang/internal/models"
+	ps "github.com/PedroMartiniano/products-golang/internal/ports/services"
+	"github.com/PedroMartiniano/products-golang/internal/utils"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type ProductController struct{}
+type ProductController struct {
+	productService ps.IProductService
+}
 
-func NewProductController() *ProductController {
-	return &ProductController{}
+func NewProductController(productService ps.IProductService) *ProductController {
+	return &ProductController{
+		productService: productService,
+	}
 }
 
 // @BasePath /product
@@ -44,9 +48,7 @@ func (pc *ProductController) CreateProductHandler(c *gin.Context) {
 		Type:        request.Type,
 	}
 
-	productService := adapters.NewProductServiceAdapter()
-
-	newProduct, err := productService.CreateProductExecute(product)
+	newProduct, err := pc.productService.CreateProductExecute(c.Request.Context(), product)
 	if err != nil {
 		code, message := httpError(err)
 		sendError(c, code, message)
@@ -80,9 +82,7 @@ func (pc *ProductController) FindProductByIdHandler(c *gin.Context) {
 		return
 	}
 
-	productService := adapters.NewProductServiceAdapter()
-
-	product, err := productService.FindProductByIdExecute(objectId)
+	product, err := pc.productService.FindProductByIdExecute(c.Request.Context(), objectId)
 
 	if err != nil {
 		code, message := httpError(err)
@@ -103,9 +103,7 @@ func (pc *ProductController) FindProductByIdHandler(c *gin.Context) {
 // @Failure      400  {object}  errorResponse
 // @Router       /product [get]
 func (pc *ProductController) ListProductsHandler(c *gin.Context) {
-	productService := adapters.NewProductServiceAdapter()
-
-	products, err := productService.ListProductsExecute()
+	products, err := pc.productService.ListProductsExecute(c.Request.Context())
 	if err != nil {
 		code, message := httpError(err)
 		sendError(c, code, message)
@@ -148,9 +146,7 @@ func (pc *ProductController) UpdateProductHandler(c *gin.Context) {
 		return
 	}
 
-	productService := adapters.NewProductServiceAdapter()
-
-	product, err := productService.FindProductByIdExecute(objectId)
+	product, err := pc.productService.FindProductByIdExecute(c.Request.Context(), objectId)
 	if err != nil {
 		code, message := httpError(err)
 		sendError(c, code, message)
@@ -165,7 +161,7 @@ func (pc *ProductController) UpdateProductHandler(c *gin.Context) {
 	utils.ReplaceStrIfNotEmpty(&product.Type, request.Type)
 
 	fmt.Println(product)
-	updatedProduct, err := productService.UpdateProductExecute(product)
+	updatedProduct, err := pc.productService.UpdateProductExecute(c.Request.Context(), product)
 	if err != nil {
 		code, message := httpError(err)
 		sendError(c, code, message)
@@ -198,9 +194,7 @@ func (pc *ProductController) DeleteProductHandler(c *gin.Context) {
 		return
 	}
 
-	productService := adapters.NewProductServiceAdapter()
-
-	product, err := productService.FindProductByIdExecute(objectId)
+	product, err := pc.productService.FindProductByIdExecute(c.Request.Context(), objectId)
 
 	if err != nil {
 		code, message := httpError(err)
@@ -208,7 +202,7 @@ func (pc *ProductController) DeleteProductHandler(c *gin.Context) {
 		return
 	}
 
-	deletedProduct, err := productService.DeleteProductExecute(product)
+	deletedProduct, err := pc.productService.DeleteProductExecute(c.Request.Context(), product)
 	if err != nil {
 		code, message := httpError(err)
 		sendError(c, code, message)

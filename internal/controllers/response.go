@@ -1,11 +1,12 @@
-package response
+package controllers
 
 import (
 	"errors"
-	"github.com/PedroMartiniano/products-golang/config"
-	"github.com/PedroMartiniano/products-golang/models"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/PedroMartiniano/products-golang/internal/config"
+	"github.com/PedroMartiniano/products-golang/internal/models"
+	"github.com/gin-gonic/gin"
 )
 
 func httpError(err error) (code int, message string) {
